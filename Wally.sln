@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wally.ConsoleApp", "Wally.ConsoleApp\Wally.ConsoleApp.csproj", "{A9CA79A0-CAFD-4262-9507-A1D7D3EAA57C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wally.Tour", "Wally.Tour\Wally.Tour.csproj", "{207AB220-10C9-43FE-B6FC-EC357EBAF596}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9CA79A0-CAFD-4262-9507-A1D7D3EAA57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CA79A0-CAFD-4262-9507-A1D7D3EAA57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CA79A0-CAFD-4262-9507-A1D7D3EAA57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CA79A0-CAFD-4262-9507-A1D7D3EAA57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{207AB220-10C9-43FE-B6FC-EC357EBAF596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{207AB220-10C9-43FE-B6FC-EC357EBAF596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{207AB220-10C9-43FE-B6FC-EC357EBAF596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{207AB220-10C9-43FE-B6FC-EC357EBAF596}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20495E17-64F1-485D-8FC8-F274209BD065}
+	EndGlobalSection
+EndGlobal
