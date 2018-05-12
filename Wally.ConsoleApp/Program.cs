@@ -73,7 +73,7 @@ namespace Wally.ConsoleApp
                 var windowStateChanger = new WindowStateChanger();
                 var tourGuide = new TourGuide(internetConnectionChecker, windowStateChanger);
                 var chromeOptions = new ChromeOptions();
-                chromeOptions.AddArguments(new List<string> { "disable-infobars", "--start-fullscreen", $@"--user-data-dir={ConfigurationManager.AppSettings["ChromeUserDataDirectory"]}" });
+                chromeOptions.AddArguments(new List<string> { "disable-infobars", "--disable-session-crashed-bubble", "--start-fullscreen", $@"--user-data-dir={ConfigurationManager.AppSettings["ChromeUserDataDirectory"]}" });
                 var service = ChromeDriverService.CreateDefaultService();
                 service.HideCommandPromptWindow = true;
                 _driver = new ChromeDriver(service, chromeOptions);
