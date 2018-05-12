@@ -103,7 +103,6 @@ namespace Wally.ConsoleApp
             if (eventType == CtrlCloseEvent)
             {
                 _driver?.Quit();
-                _driver?.Quit();
             }
             return false;
         }
