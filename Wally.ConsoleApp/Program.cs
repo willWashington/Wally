@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using OpenQA.Selenium;
@@ -13,22 +14,33 @@ namespace Wally.ConsoleApp
     static class Program
     {
         private static readonly IReadOnlyCollection<Page> Pages = new List<Page> {
-            new Page("https://www.icloud.com/#calendar", driver => {
-                void ShowAdditionalDays() {
-                    var numberOfAdditionalDaysToShow = 6;
-                    var daysDisplayTimeInSeconds = Page.DefaultDisplayDurationInSeconds / numberOfAdditionalDaysToShow;
-                    Thread.Sleep(TimeSpan.FromSeconds(daysDisplayTimeInSeconds));
-                    driver.SwitchTo().Frame(driver.FindElement(By.Name("calendar")));
-                    var element = driver.FindElement(By.CssSelector(@"#sc2702 > div"));
-                    for (var i = 0; i < numberOfAdditionalDaysToShow; i++) {
-                        element.Click();
-                        Thread.Sleep(TimeSpan.FromSeconds(daysDisplayTimeInSeconds));
-                    }
-                }
-                var numberOfSecondsToWaitForPageToLoad = 5;
+            new Page("https://informeddelivery.usps.com/box/pages/secure/DashboardAction_input.action", driver => {
+                var numberOfSecondsToWaitForPageToLoad = 15;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
-                return ShowAdditionalDays;
-            }, 0)
+                var element = driver.FindElement(By.CssSelector("#pkgtab > a"));
+                ((IJavaScriptExecutor)driver).ExecuteScript("$(arguments[0]).click();", element);
+                element = driver.FindElement(By.ClassName("navcontainer"));
+                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].parentNode.removeChild(arguments[0]);", element);
+                element = driver.FindElement(By.ClassName("packageContainer"));
+                ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+                return null;
+            })
+            //, new Page("https://www.icloud.com/#calendar", driver => {
+            //    //void ShowAdditionalDays() {
+            //    //    var numberOfAdditionalDaysToShow = 6;
+            //    //    var daysDisplayTimeInSeconds = Page.DefaultDisplayDurationInSeconds / numberOfAdditionalDaysToShow;
+            //    //    Thread.Sleep(TimeSpan.FromSeconds(daysDisplayTimeInSeconds));
+            //    //    driver.SwitchTo().Frame(driver.FindElement(By.Name("calendar")));
+            //    //    var element = driver.FindElement(By.CssSelector(@"#sc2702 > div"));
+            //    //    for (var i = 0; i < numberOfAdditionalDaysToShow; i++) {
+            //    //        element.Click();
+            //    //        Thread.Sleep(TimeSpan.FromSeconds(daysDisplayTimeInSeconds));
+            //    //    }
+            //    //}
+            //    var numberOfSecondsToWaitForPageToLoad = 5;
+            //    Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
+            //    return null; // ShowAdditionalDays;
+            //})
             , new Page("https://www.wunderground.com/weather/us/tn/memphis", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 5;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
