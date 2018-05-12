@@ -78,6 +78,8 @@ namespace Wally.ConsoleApp
                 service.HideCommandPromptWindow = true;
                 _driver = new ChromeDriver(service, chromeOptions);
                 tourGuide.Guide(Pages, _driver);
+                var pages = Pages.OrderBy(x => "https://customer.xfinity.com/#/services/internet".Equals(x.Url) ? 0 : 1).ToList();
+                tourGuide.Guide(pages, _driver);
             }
             catch (Exception) {
                 ConsoleEventCallback(CtrlCloseEvent);
