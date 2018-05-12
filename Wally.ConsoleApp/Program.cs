@@ -47,10 +47,10 @@ namespace Wally.ConsoleApp
                 return null;
             }, 105)
             , new Page("https://howmanydaystill.com/its/disney-vacation-17")
-            , new Page("https://customer.xfinity.com/#/devices", driver => {
+            , new Page("https://customer.xfinity.com/#/services/internet", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 10;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
-                var element = driver.FindElement(By.XPath(@"//*[@id=""page-view""]/section[3]/div/div/div[3]/div[1]/h2"));
+                var element = driver.FindElement(By.CssSelector(@"#page-view > section > div > div > div:nth-child(6) > div"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
                 return null;
             })
