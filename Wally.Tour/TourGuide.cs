@@ -23,6 +23,7 @@ namespace Wally.Tour
                         if (_internetConnectionChecker.InternetConnectionIsAvailable()) {
                             _windowStateChanger.ShowMaximized("PingPlotter");
                             var pingPlotterDisplayMoment = DateTime.Now;
+                            Console.WriteLine($"{DateTime.Now}: Showing '{page.Url}'");
                             driver.Navigate().GoToUrl(page.Url);
                             var driverAction = page.DriverAction?.Invoke(driver);
                             while (TimeSpan.FromSeconds(5) > DateTime.Now - pingPlotterDisplayMoment) {
