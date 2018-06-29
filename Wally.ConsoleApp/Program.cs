@@ -58,11 +58,13 @@ namespace Wally.ConsoleApp
             //    ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.visibility='hidden'", controlsDiv);
             //    return null;
             //}, 105)
-            , new Page("https://howmanydaystill.com/its/disney-vacation-17")
-            , new Page("https://customer.xfinity.com/#/services/internet", driver => {
-                var numberOfSecondsToWaitForPageToLoad = 10;
+            , new Page("https://howmanydaystill.com/its/disney-vacation-17", expiration: new DateTime(2018, 10, 29))
+            , new Page("https://howmanydaystill.com/its/quinns-birthday", expiration: new DateTime(2018, 7, 1))
+            , new Page("https://howmanydaystill.com/its/baby-beckham", expiration: new DateTime(2018, 11, 23))
+            , new Page("https://customer.xfinity.com/#/services/internet#usage", driver => {
+                var numberOfSecondsToWaitForPageToLoad = 15;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
-                var element = driver.FindElement(By.CssSelector(@"#page-view > section > div > div > div:nth-child(6) > div"));
+                var element = driver.FindElement(By.CssSelector(@"#usage"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
                 return null;
             })
@@ -75,26 +77,34 @@ namespace Wally.ConsoleApp
         {
             _handler = ConsoleEventCallback;
             SetConsoleCtrlHandler(_handler, true);
-            try {
-                foreach (var process in Process.GetProcessesByName("chromedriver"))
-                {
-                    process.Kill();
-                }
-
-                var internetConnectionChecker = new InternetConnectionChecker();
-                var windowStateChanger = new WindowStateChanger();
-                var tourGuide = new TourGuide(internetConnectionChecker, windowStateChanger);
-                var chromeOptions = new ChromeOptions();
-                chromeOptions.AddArguments(new List<string> { "disable-infobars", "--disable-session-crashed-bubble", "--start-fullscreen", $@"--user-data-dir={ConfigurationManager.AppSettings["ChromeUserDataDirectory"]}" });
-                var service = ChromeDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-                _driver = new ChromeDriver(service, chromeOptions);
-                var pages = Pages.OrderBy(x => "https://customer.xfinity.com/#/services/internet".Equals(x.Url) ? 0 : 1).ToList();
-                tourGuide.Guide(pages, _driver);
+            foreach (var process in Process.GetProcessesByName("chromedriver"))
+            {
+                process.Kill();
             }
-            catch (Exception) {
-                ConsoleEventCallback(CtrlCloseEvent);
-                Environment.Exit(1);
+
+            var internetConnectionChecker = new InternetConnectionChecker();
+            var windowStateChanger = new WindowStateChanger();
+            var tourGuide = new TourGuide(internetConnectionChecker, windowStateChanger);
+            var pages = Pages.OrderBy(x => "https://www.wunderground.com/weather/us/tn/memphis".Equals(x.Url) ? 0 : 1).ToList();
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArguments(new List<string> { "disable-infobars", "--disable-session-crashed-bubble", "--start-fullscreen", $@"--user-data-dir={ConfigurationManager.AppSettings["ChromeUserDataDirectory"]}" });
+            while (DateTime.Now < DateTime.MaxValue) {
+                try {
+                    var service = ChromeDriverService.CreateDefaultService();
+                    service.HideCommandPromptWindow = true;
+                    _driver = new ChromeDriver(service, chromeOptions);
+                    windowStateChanger.ShowMaximized("PingPlotter");
+                    tourGuide.Guide(pages, _driver);
+                    windowStateChanger.ShowMaximized("PingPlotter");
+                    _driver.Close();
+                    _driver?.Quit();
+                }
+                catch (Exception e) {
+                    Console.WriteLine($"Program {DateTime.Now}: {e}");
+                    Thread.Sleep(20000);
+                    //ConsoleEventCallback(CtrlCloseEvent);
+                    //Environment.Exit(1);
+                }
             }
         }
 
@@ -102,6 +112,7 @@ namespace Wally.ConsoleApp
         {
             if (eventType == CtrlCloseEvent)
             {
+                _driver.Close();
                 _driver?.Quit();
             }
             return false;
