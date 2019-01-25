@@ -30,6 +30,7 @@ namespace Wally.Tour
                             var pingPlotterDisplayMoment = DateTime.Now;
                             Console.WriteLine($"{DateTime.Now}: Showing ({index+1}/{pages.Count}): '{page.Url}'");
                             driver.Navigate().GoToUrl(page.Url);
+                            _windowStateChanger.ShowMaximized("PingPlotter");
                             var driverAction = page.DriverAction?.Invoke(driver);
                             while (TimeSpan.FromSeconds(5) > DateTime.Now - pingPlotterDisplayMoment) {
                                 Thread.Sleep(TimeSpan.FromSeconds(1));
