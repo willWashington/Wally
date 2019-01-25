@@ -22,7 +22,9 @@ namespace Wally.Tour {
         }
 
         void Show(Process process, int command) {
-            ShowWindow(process.MainWindowHandle, command);
+            if (process != null) {
+                ShowWindow(process.MainWindowHandle, command);
+            }
         }
     }
 }
