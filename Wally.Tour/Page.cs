@@ -14,7 +14,7 @@ namespace Wally.Tour {
         public string Url { get; }
         public Func<IWebDriver, Action> DriverAction { get; }
         public DateTime? Expiration { get; }
-        const int DefaultDisplayDurationInSeconds = 30;
+        const int DefaultDisplayDurationInSeconds = 180;
         public bool IsExpired => DateTime.Now > (Expiration ?? DateTime.Now.AddMinutes(1));
     }
 }
