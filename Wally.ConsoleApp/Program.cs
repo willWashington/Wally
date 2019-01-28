@@ -15,7 +15,7 @@ namespace Wally.ConsoleApp
     static class Program
     {
         private static readonly IReadOnlyCollection<Page> Pages = new List<Page> {
-            new Page("https://informeddelivery.usps.com/box/pages/secure/DashboardAction_input.action", driver => {
+            new Page("https://reg.usps.com/portal/login?app=RMIN&appURL=https%3A%2F%2Finformeddelivery.usps.com%2Fbox%2Fpages%2Fsecure%2FDashboardAction_input.action%3Frestart%3D1", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 15;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
                 var element = driver.FindElement(By.CssSelector("#pkgtab > a"));
@@ -75,11 +75,21 @@ namespace Wally.ConsoleApp
                 var element = driver.FindElement(By.CssSelector(@"#usage"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
                 var now = DateTime.Now;
-                if (now.Day > 7) {
-                    var monthProgress = Decimal.Divide(now.Day, DateTime.DaysInMonth(now.Year, now.Month));
-                    var labelHeightPercentage = new decimal(61.5) - (monthProgress * new decimal(61.5)) + 4;
-                    element = driver.FindElement(By.CssSelector(@"#usage > div > div:nth-child(2) > div"));
-                    ((IJavaScriptExecutor) driver).ExecuteScript($@"var n=document.createElement('div');n.style.position='absolute';n.style.right=0;n.style.marginRight='-7px';n.style.top='{labelHeightPercentage}%';n.style.width='120px';n.style.backgroundColor='lightblue';n.style.fontSize='22pt';n.style.fontWeight='bold';n.style.textAlign='right';n.style.paddingRight='7px';n.innerHTML='{now.ToString("MMM", CultureInfo.InvariantCulture)} {now.Day}';console.log(n);arguments[0].prepend(n);            var l=document.createElement('div');l.style.position='absolute';l.style.right=0;l.style.marginRight='-7px';l.style.top='{labelHeightPercentage}%';l.style.width='180px';l.style.height='2px';l.style.backgroundColor='black';l.style.paddingRight='7px';l.innerHTML='&nbsp;';l.style.zIndex=1000;arguments[0].prepend(l);", element);
+                if (now.Day >= 5) {
+                    var monthProgress = decimal.Divide(now.Day, DateTime.DaysInMonth(now.Year, now.Month));
+                    //var labelHeightPercentage = new decimal(61.5) - (monthProgress * new decimal(61.5)) + 4;
+                    //element = driver.FindElement(By.CssSelector(@"#usage > div > div:nth-child(2) > div"));
+                    //((IJavaScriptExecutor) driver).ExecuteScript($@"var n=document.createElement('div');n.style.position='absolute';n.style.right=0;n.style.marginRight='-7px';n.style.top='{labelHeightPercentage}%';n.style.width='120px';n.style.backgroundColor='lightblue';n.style.fontSize='22pt';n.style.fontWeight='bold';n.style.textAlign='right';n.style.paddingRight='7px';n.innerHTML='{now.ToString("MMM", CultureInfo.InvariantCulture)} {now.Day}';console.log(n);arguments[0].prepend(n);            var l=document.createElement('div');l.style.position='absolute';l.style.right=0;l.style.marginRight='-7px';l.style.top='{labelHeightPercentage}%';l.style.width='180px';l.style.height='2px';l.style.backgroundColor='black';l.style.paddingRight='7px';l.innerHTML='&nbsp;';l.style.zIndex=1000;arguments[0].prepend(l);", element);
+                    var selectorToFindUsageDiv = @"#usage > div > div:nth-child(1) > div > div > div > p > span > b:nth-child(1)";
+                    var selectorToFindGraphDiv = @"#usage > div > div:nth-child(2) > div";
+                    var by = By.CssSelector(selectorToFindUsageDiv);
+                    element = driver.FindElement(by);
+                    var gigabytesRemaining = Convert.ToInt32(((IJavaScriptExecutor) driver).ExecuteScript($@"return parseInt(arguments[0].innerHTML.match(/\d/g).join(''));", element));
+                    var quotaProgress = 1 - decimal.Divide(gigabytesRemaining, 1024);
+                    if (quotaProgress >= new decimal(.9) || monthProgress > quotaProgress) {
+                        element = driver.FindElement(By.CssSelector(selectorToFindGraphDiv));
+                        ((IJavaScriptExecutor) driver).ExecuteScript($@"var n=document.createElement('div');n.style.position='absolute';n.style.right=0;n.style.marginRight='29px';n.style.border='4px solid red';n.style.top='34%';n.style.backgroundColor='lightblue';n.style.fontSize='96pt';n.style.lineHeight=1.0;n.style.fontWeight='bold';n.innerHTML='!!!';n.style.zIndex=1000;console.log(n);arguments[0].prepend(n);", element);
+                    }
                 }
                 return null;
             })
