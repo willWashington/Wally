@@ -3,7 +3,10 @@ using OpenQA.Selenium;
 
 namespace Wally.Tour {
     public class Page {
-        public Page(string url, Func<IWebDriver, Action> driverAction = null, int? secondsToDisplayAfterAction = null, DateTime? expiration = null) {
+        private const int DefaultDisplayDurationInSeconds = 180;
+
+        public Page(string voiceCommandWord, string url, Func<IWebDriver, Action> driverAction = null, int? secondsToDisplayAfterAction = null, DateTime? expiration = null) {
+            VoiceCommandWord = voiceCommandWord;
             Url = url;
             DriverAction = driverAction;
             Expiration = expiration;
@@ -11,10 +14,10 @@ namespace Wally.Tour {
         }
 
         public int SecondsToDisplayAfterAction { get; }
+        public string VoiceCommandWord { get; }
         public string Url { get; }
         public Func<IWebDriver, Action> DriverAction { get; }
         public DateTime? Expiration { get; }
-        const int DefaultDisplayDurationInSeconds = 180;
         public bool IsExpired => DateTime.Now > (Expiration ?? DateTime.Now.AddMinutes(1));
     }
 }

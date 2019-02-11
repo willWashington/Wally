@@ -3,16 +3,13 @@
 namespace Wally.Tour {
     public class InternetConnectionChecker {
         public bool InternetConnectionIsAvailable() {
-            try
-            {
+            try {
                 using (var client = new WebClient())
-                using (client.OpenRead("http://clients3.google.com/generate_204"))
-                {
+                using (client.OpenRead("http://clients3.google.com/generate_204")) {
                     return true;
                 }
             }
-            catch
-            {
+            catch {
                 return false;
             }
         }

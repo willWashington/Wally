@@ -31,8 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,22 +43,26 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationClient" />
-    <Reference Include="WebDriver, Version=3.12.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.3.12.1\lib\net45\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InternetConnectionChecker.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="PageInitializer.cs" />
+    <Compile Include="PingPlotterWindowStateChanger.cs" />
+    <Compile Include="Tab.cs" />
+    <Compile Include="TabLoader.cs" />
     <Compile Include="TourGuide.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VoiceListener.cs" />
+    <Compile Include="TabSwitcher.cs" />
     <Compile Include="WindowFocusSwitcher.cs" />
     <Compile Include="WindowStateChanger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,9 @@ namespace Wally.Tour {
         private const int SwShowMaximized = 3;
 
         [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [DllImport("user32.dll")]
+        private static extern bool SetFocus(IntPtr hWnd);
 
         public void ShowMinimized(string processName) {
             var process = Process.GetProcessesByName(processName).FirstOrDefault(x => x.MainWindowHandle != IntPtr.Zero);
@@ -21,8 +23,9 @@ namespace Wally.Tour {
             Show(process, SwShowMaximized);
         }
 
-        void Show(Process process, int command) {
+        private void Show(Process process, int command) {
             if (process != null) {
+                SetFocus(process.MainWindowHandle);
                 ShowWindow(process.MainWindowHandle, command);
             }
         }
