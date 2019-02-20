@@ -13,19 +13,24 @@ namespace Wally.ConsoleApp {
     internal static class Program {
         private static readonly IReadOnlyCollection<Page> Pages = new List<Page> {
 
-            new Page("weather", "https://www.wunderground.com/weather/us/tn/memphis", driver => {
+            new Page("weather", "https://www.wunderground.com/weather/us/tn/knoxville", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 5;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
                 var element = driver.FindElement(By.CssSelector("#inner-content > div.city-body > div.row.current-forecast > div > div.row.city-forecast > div > div > city-today-forecast > div > div.small-12.medium-12.large-3.columns.alert-signup-wrap"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].parentNode.removeChild(arguments[0]);", element);
-                element = driver.FindElement(By.CssSelector(@"#inner-content > div.city-body > div.row.current-forecast > div > div.row.city-forecast > div"));
-                ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+                element = driver.FindElement(By.CssSelector(@"#body")); //not working
+                ((IJavaScriptExecutor) driver).ExecuteScript("document.body.style.backgroundColor = #5a5a5a');", 0); //not working
                 return null;
             })
-            , new Page("radar", "https://www.msn.com/en-us/weather/fullscreenmaps"
-                , driver => { Thread.Sleep(2000);
-                    return null;
-                })
+            //, new Page("radar", "https://www.msn.com/en-us/weather/fullscreenmaps"
+            //    , driver => { Thread.Sleep(2000);
+            //        return null;
+            //    })
+
+
+
+
+
         };
 
         private static ConsoleEventDelegate _handler;
