@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Speech.Recognition;
 using System.Threading;
-using System.Xml.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Wally.Tour;
@@ -14,26 +13,19 @@ namespace Wally.ConsoleApp {
     internal static class Program {
         private static readonly IReadOnlyCollection<Page> Pages = new List<Page> {
 
-            new Page("weather", "https://weather.com/weather/tenday/l/USTN0268:1:US", driver => {
+            new Page("weather", "https://www.wunderground.com/weather/us/tn/knoxville", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 5;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
                 var element = driver.FindElement(By.CssSelector("#inner-content > div.city-body > div.row.current-forecast > div > div.row.city-forecast > div > div > city-today-forecast > div > div.small-12.medium-12.large-3.columns.alert-signup-wrap"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].parentNode.removeChild(arguments[0]);", element);
-                element = driver.FindElement(By.ClassName("region region-name"));
-                ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
-                //Thread.Sleep(30000);
-                //element = driver.FindElement(By.ClassName("module-header"));
-                //((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
-
-
-
-
+                element = driver.FindElement(By.CssSelector(@"#body")); //not working
+                ((IJavaScriptExecutor) driver).ExecuteScript("document.body.style.backgroundColor = #5a5a5a');", 0); //not working
                 return null;
             })
-            , new Page("radar", "https://weather.com/weather/radar/interactive/l/USTN0268:1:US?layer=radar"
-                , driver => { Thread.Sleep(2000);
-                    return null;
-                })
+            //, new Page("radar", "https://www.msn.com/en-us/weather/fullscreenmaps"
+            //    , driver => { Thread.Sleep(2000);
+            //        return null;
+            //    })
 
 
 
@@ -48,17 +40,6 @@ namespace Wally.ConsoleApp {
         private static ChromeDriver _driver;
 
         private static void Main() {
-
-            //Attempt to change the app.config at run time to set the ChromeUserDataDirectory to the user's path via Environment.UserName
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
-            config.AppSettings.Settings["ChromeUserDataDirectory"].Value = $"C:\\Users\\{Environment.UserName}\\AppData\\Local\\Google\\Chrome\\User Data";
-            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
-            config.Save(ConfigurationSaveMode.Modified);
-            //C:\Users\NEO\AppData\Local\Google\Chrome\User Data
-
-
-
             _handler = ConsoleEventCallback;
             SetConsoleCtrlHandler(_handler, true);
             var chromeDriverTerminator = new ChromeDriverTerminator();
