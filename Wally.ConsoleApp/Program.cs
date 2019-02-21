@@ -13,23 +13,26 @@ namespace Wally.ConsoleApp {
     internal static class Program {
         private static readonly IReadOnlyCollection<Page> Pages = new List<Page> {
 
-            new Page("weather", "https://www.wunderground.com/weather/us/tn/knoxville", driver => {
+            new Page("weather", "https://weather.com/weather/tenday/l/USTN0268:1:US", driver => {
                 var numberOfSecondsToWaitForPageToLoad = 5;
                 Thread.Sleep(TimeSpan.FromSeconds(numberOfSecondsToWaitForPageToLoad));
-                var element = driver.FindElement(By.CssSelector("#inner-content > div.city-body > div.row.current-forecast > div > div.row.city-forecast > div > div > city-today-forecast > div > div.small-12.medium-12.large-3.columns.alert-signup-wrap"));
-                ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].parentNode.removeChild(arguments[0]);", element);
-                element = driver.FindElement(By.CssSelector(@"#body")); //not working
-                ((IJavaScriptExecutor) driver).ExecuteScript("document.body.style.backgroundColor = #5a5a5a');", 0); //not working
+                var element = driver.FindElement(By.ClassName("region-main"));
+                ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+
                 return null;
             })
-            //, new Page("radar", "https://www.msn.com/en-us/weather/fullscreenmaps"
-            //    , driver => { Thread.Sleep(2000);
-            //        return null;
-            //    })
+            , new Page("radar", "https://weather.com/weather/radar/interactive/l/USTN0268:1:US?layer=radar"
+                , driver => { Thread.Sleep(2000);
+                    var element = driver.FindElement(By.CssSelector("#hero-right-MapRightRailDrawer-4461824e-b593-4644-8b19-3de2a48398c9 > div > button > span"));
+                    ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
+                    element = driver.FindElement(By.CssSelector("#hero-left-InteractiveMap-bb45c7ea-e210-4a23-add0-826b6506eaf8 > div > div > div.styles__Timeline__bsdZX > button:nth-child(3) > span"));
+                    ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
 
 
 
-
+                    return null;
+                })
 
         };
 
@@ -40,6 +43,16 @@ namespace Wally.ConsoleApp {
         private static ChromeDriver _driver;
 
         private static void Main() {
+
+            //Attempt to change the app.config at run time to set the ChromeUserDataDirectory to the user's path via Environment.UserName
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
+            config.AppSettings.Settings["ChromeUserDataDirectory"].Value = $"C:\\Users\\{Environment.UserName}\\AppData\\Local\\Google\\Chrome\\User Data";
+            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
+            config.Save(ConfigurationSaveMode.Modified);
+            //C:\Users\NEO\AppData\Local\Google\Chrome\User Data
+
+
             _handler = ConsoleEventCallback;
             SetConsoleCtrlHandler(_handler, true);
             var chromeDriverTerminator = new ChromeDriverTerminator();

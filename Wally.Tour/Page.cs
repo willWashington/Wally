@@ -3,14 +3,14 @@ using OpenQA.Selenium;
 
 namespace Wally.Tour {
     public class Page {
-        private const int DefaultDisplayDurationInSeconds = 180;
+        private const int DefaultDisplayDurationInSeconds = 600;
 
         public Page(string voiceCommandWord, string url, Func<IWebDriver, Action> driverAction = null, int? secondsToDisplayAfterAction = null, DateTime? expiration = null) {
             VoiceCommandWord = voiceCommandWord;
             Url = url;
             DriverAction = driverAction;
             Expiration = expiration;
-            SecondsToDisplayAfterAction = secondsToDisplayAfterAction ?? DefaultDisplayDurationInSeconds;
+            SecondsToDisplayAfterAction = secondsToDisplayAfterAction ?? DefaultDisplayDurationInSeconds + 300;
         }
 
         public int SecondsToDisplayAfterAction { get; }
