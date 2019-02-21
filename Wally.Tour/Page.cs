@@ -3,7 +3,8 @@ using OpenQA.Selenium;
 
 namespace Wally.Tour {
     public class Page {
-        private const int DefaultDisplayDurationInSeconds = 180;
+        private const int DefaultDisplayDurationInSeconds = 600;
+        //changed this to allow for easier testing
 
         public Page(string voiceCommandWord, string url, Func<IWebDriver, Action> driverAction = null, int? secondsToDisplayAfterAction = null, DateTime? expiration = null) {
             VoiceCommandWord = voiceCommandWord;
