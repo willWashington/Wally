@@ -24,7 +24,7 @@ namespace Wally.Tour {
                     var url = pages.Single(x => x.VoiceCommandWord.Equals(parsedSpeech, StringComparison.InvariantCultureIgnoreCase)).Url;
                     Console.WriteLine($"parsedSpeech: '{parsedSpeech}'; url: ${url}");
                     if (tabs.ContainsKey(url)) {
-                        _whenToNextAutomaticallySwitch = new DateTime(Math.Max(DateTime.Now.AddSeconds(30).Ticks, _whenToNextAutomaticallySwitch.Ticks));
+                        _whenToNextAutomaticallySwitch = new DateTime(Math.Max(DateTime.Now.AddSeconds(300).Ticks, _whenToNextAutomaticallySwitch.Ticks));
                         _driver.SwitchTo().Window(tabs[url].WindowHandle);
                     } else {
                         Console.Beep();

@@ -19,7 +19,6 @@ namespace Wally.ConsoleApp {
                 var element = driver.FindElement(By.ClassName("region-main"));
                 ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
 
-
                 return null;
             })
             , new Page("radar", "https://weather.com/weather/radar/interactive/l/USTN0268:1:US?layer=radar"
@@ -28,8 +27,12 @@ namespace Wally.ConsoleApp {
                     ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
                     element = driver.FindElement(By.CssSelector("#hero-left-InteractiveMap-bb45c7ea-e210-4a23-add0-826b6506eaf8 > div > div > div.styles__Timeline__bsdZX > button:nth-child(3) > span"));
                     ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
+                    Thread.Sleep(9000);
+                    element = driver.FindElement(By.CssSelector("#hero-left-InteractiveMap-bb45c7ea-e210-4a23-add0-826b6506eaf8 > div > div > div.styles__Tools__3JYDQ > div.styles__zoomControls__3ZS6- > button:nth-child(2) > span"));
+                    ((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
 
-
+                    //element = driver.FindElement(By.CssSelector("#hero-left-InteractiveMap-bb45c7ea-e210-4a23-add0-826b6506eaf8 > div > div > div.styles__Timeline__bsdZX > button:nth-child(3) > span"));
+                    //((IJavaScriptExecutor) driver).ExecuteScript("arguments[0].click();", element);
 
                     return null;
                 })
@@ -46,12 +49,8 @@ namespace Wally.ConsoleApp {
 
             //Attempt to change the app.config at run time to set the ChromeUserDataDirectory to the user's path via Environment.UserName
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
             config.AppSettings.Settings["ChromeUserDataDirectory"].Value = $"C:\\Users\\{Environment.UserName}\\AppData\\Local\\Google\\Chrome\\User Data";
-            Console.WriteLine("#------------> " + config.AppSettings.Settings["ChromeUserDataDirectory"].Value);
             config.Save(ConfigurationSaveMode.Modified);
-            //C:\Users\NEO\AppData\Local\Google\Chrome\User Data
-
 
             _handler = ConsoleEventCallback;
             SetConsoleCtrlHandler(_handler, true);

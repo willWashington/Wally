@@ -10,8 +10,10 @@ namespace Wally.Tour {
             _speechRecognitionEngine = speechRecognitionEngine;
         }
 
-        public void Listen(IEnumerable<string> choices, Action<string> onSpeechParsed) {
-            _speechRecognitionEngine.SpeechRecognized += (sender, args) => { onSpeechParsed(args.Result.Text);};
+        public void Listen(IEnumerable<string> choices, Action<string> onSpeechParsed)
+        {
+            //_speechRecognitionEngine.SpeechRecognized += (sender, args) => { onSpeechParsed(args.Result.Text); };
+            //commented out to remove listening
             _speechRecognitionEngine.LoadGrammar(new Grammar(new GrammarBuilder(new Choices(choices.ToArray()))));
             _speechRecognitionEngine.SetInputToDefaultAudioDevice();
             _speechRecognitionEngine.RecognizeAsync(RecognizeMode.Multiple);

@@ -62,7 +62,20 @@ namespace Wally.Tour {
                         catch (Exception exception) {
                             onError(page, exception);
                         }
-                        _tabSwitcher.WaitAtLeast(TimeSpan.FromSeconds(10));
+                        int time = 0;
+                        if (page.Url.Contains("radar"))
+                        {
+                            time = 40;
+                        } else
+                        {
+                            time = 10;
+                        }
+
+                        Console.WriteLine($"{DateTime.Now}: Delay time is {time}");
+                        _tabSwitcher.WaitAtLeast(TimeSpan.FromSeconds(time));
+                        
+                        //tab switch timer controller
+                                               
                     }
                 }
             }
